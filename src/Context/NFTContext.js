@@ -37,6 +37,10 @@ export const NFTProvider = ({ children }) => {
     const connectWallet = async () => {
       try {
         if (!ethereum) return alert('please install metamask')
+        const chainId = await ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x34a1') {
+          return alert('Please switch to the immutable zkevm  testnet');
+        }
         const accounts = await ethereum.request({ method: 'eth_requestAccounts' })
         setCurrentAccount(accounts[0])
         window.location.reload()
@@ -49,7 +53,10 @@ export const NFTProvider = ({ children }) => {
     const checkIfWalletIsConnect = async () => {
       try {
         if (!ethereum) return alert('Please install MetaMask.')
-  
+        const chainId = await ethereum.request({ method: 'eth_chainId' });
+        if (chainId !== '0x34a1') {
+          return alert('Please switch to the immutable zkevm  testnet');
+        }
         const accounts = await ethereum.request({ method: 'eth_accounts' })
   
         if (accounts.length) {
@@ -90,9 +97,7 @@ export const NFTProvider = ({ children }) => {
 
       const bnbMint = async ()=>{
         const NftContractInstance = loadNftContract()
-        let uri = 1
-        let bnbValue = {value:ethers.utils.parseEther("0.1".toString())}
-        await NftContractInstance.Bnbmint(uri,currentAccount,bnbValue)
+        await NftContractInstance.safeMint()
 
       }
 
