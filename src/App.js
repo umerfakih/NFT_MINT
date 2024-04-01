@@ -6,7 +6,7 @@ import { useContext } from 'react'
 function App() {
   const {
     connectWallet,
-    bnbMint,
+    bnbMint
   } = useContext(NFTContext)
 
   return (
@@ -18,8 +18,8 @@ function App() {
       </div>
       <div className="container my-3">
         <Button variant="primary" onClick={bnbMint}>
-          Bnb Mint
-        </Button>{' '}
+          Mint
+        </Button>
       </div>
     </>
   )
