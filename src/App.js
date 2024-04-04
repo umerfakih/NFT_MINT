@@ -1,63 +1,42 @@
-import React, { useEffect } from 'react';
-import './App.css';
+import React, { useContext } from 'react';
+import { render } from 'react-dom';
+import TelegramLoginButton from 'telegram-login-button';
 import Button from 'react-bootstrap/Button';
 import { NFTContext } from './Context/NFTContext';
-import { useContext } from 'react';
 
-const App = () => {
+function App() {
   const { connectWallet, bnbMint } = useContext(NFTContext);
 
-  useEffect(() => {
-    // Load Telegram widget script
-    const script = document.createElement('script');
-    script.src = 'https://telegram.org/js/telegram-widget.js?22';
-    script.async = true;
-    document.body.appendChild(script);
-
-    // Define the callback function
-    window.onTelegramAuth = function(user) {
-      alert(
-        'Logged in as ' +
-          user.first_name +
-          ' ' +
-          user.last_name +
-          ' (' +
-          user.id +
-          (user.username ? ', @' + user.username : '') +
-          ')'
-      );
-    };
-
-    return () => {
-      // Cleanup function to remove the script when the component unmounts
-      document.body.removeChild(script);
-      delete window.onTelegramAuth;
-    };
-  }, []);
+  const handleTelegramAuth = (user) => {
+    console.log(user); // Handle Telegram user data
+    // Perform actions with user data if needed
+  };
 
   return (
     <>
       <div className="container my-3">
         <Button variant="primary" type="submit" onClick={connectWallet}>
-          Connect Wallet
+          Connect Metamask
         </Button>
+      </div>
+      <div className="container my-3">
+        <TelegramLoginButton
+          botName="AstraNovaBot"
+          dataOnauth={handleTelegramAuth}
+          usePic={true}
+          className="custom-class"
+          cornerRadius={5}
+          requestAccess={true}
+          buttonSize="medium"
+        />
       </div>
       <div className="container my-3">
         <Button variant="primary" onClick={bnbMint}>
-          Mint
+          Mint NFT
         </Button>
-      </div>
-      {/* Include the Telegram widget */}
-      <div className="container my-3">
-        <div
-          className="telegram-widget"
-          data-telegram-login="AstraNovaBot"
-          data-size="large"
-          data-onauth="onTelegramAuth(user)"
-        ></div>
       </div>
     </>
   );
-};
+}
 
-export default App;
+export default App; // Exporting App as default
